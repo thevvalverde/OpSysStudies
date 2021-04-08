@@ -8,6 +8,9 @@
 static void handler1() { printf("received SIGUSR1\n"); }
 static void handler2() { printf("received SIGUSR2\n"); }
 static void handler3() { printf("received SIGHUP\n"); }
+static void handler4() { printf("received SIGTSTP\n"); }
+static void handler5() { printf("received SIGINT\n"); }
+static void handler6() { printf("received SIGKILL\n"); }
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +29,18 @@ int main(int argc, char *argv[])
     {
         fprintf(stderr, "Can’t catch SIGHUP: %s", strerror(errno));
         exit(EXIT_FAILURE);
+    }
+    if (signal(SIGTSTP, handler4) == SIG_ERR)
+    {
+        fprintf(stderr, "Can't catch SIGTSTP: %s", strerror(errno));
+        exit(EXIT_FAILURE);   
+    }
+    if (signal(SIGINT, handler5) == SIG_ERR) {
+        fprintf(stderr, "Can't catch SIGINT: %s", strerror(errno));
+        exit(EXIT_FAILURE);   
+    }
+    if (signal(SIGKILL, handler6) == SIG_ERR) {
+        fprintf(stderr, "Can't catch SIGKILL: %s", strerror(errno));
     }
     /* stick around ... */
     for (;;)
