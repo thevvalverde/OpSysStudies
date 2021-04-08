@@ -1,0 +1,6 @@
+esse  aqui e o arquivo cujo conteudo eu desejo que seja impresso. idealmente, esse arquivo seria enorme, motivo pelo qual estou escrevendo varias coisas e enchendo linguica o maximo que posso. notem tambem que estou evitando acentos e cedilhas, pois o linux tem severos problemas de aprendizado e as vezes nao consegue compreender tais caracteres, mesmo que existam e sejam usados ha anos, pois o mundo e americanocentrico e todas essas coisas hahahahahhaha
+quebra de linha pra ver se o computador e realmente inteligente tlg
+
+
+tres quebra de linha pq nos que e bota fogo no parquinho
+e agora um control d pra encerrar tudo e se deus quiser funcionou
