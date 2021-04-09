@@ -9,6 +9,7 @@ static int count = 0;
 void timer_handler(int signum)
 {
     printf("timer expired %d times\n", ++count);
+    if (count==3) exit(EXIT_SUCCESS);
 }
 int main(int argc, char *argv[])
 {
