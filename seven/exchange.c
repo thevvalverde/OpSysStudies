@@ -4,9 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+static int count;
 static void handler_parent()
 {
     printf("%d: Parent received signal\n", getpid());
+    printf("count increased: %d\n", ++count);
 }
 static void handler_child()
 {
@@ -15,6 +17,7 @@ static void handler_child()
 
 int main(int argc, char *argv[])
 {
+    count = 0;
     pid_t pid;
     if (signal(SIGUSR1, handler_parent) == SIG_ERR)
     { /* signal error */
@@ -33,12 +36,16 @@ int main(int argc, char *argv[])
     {
         /* parent’s code */
         kill(pid, SIGUSR2);
-        pause();
+        for(;;)
+            pause();
     }
     else
     {
         /* child’s code */
-        kill(getppid(), SIGUSR1);
-        pause();
+        for(int i = 0; i < 3; i++){
+            kill(getppid(), SIGUSR1);
+            sleep(1);
+        }
+        kill(getppid(), SIGKILL);
     }
 }
