@@ -7,9 +7,15 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define N 5;
 #define LOCALHOST "localhost"
+
+bool prefix(const char *pre, const char *str)
+{
+    return strncmp(pre, str, strlen(pre)) == 0;
+}
 
 int main(int argc, char *argv[])
 {
@@ -44,18 +50,21 @@ int main(int argc, char *argv[])
     listen(sock, 3); 
     socklen_t remoteClientSize = sizeof(client);
     while(1) {
-
-        char buf[1024];
+        char* buf = malloc(1024*sizeof(char));
         if (recvfrom(sock, buf, sizeof(buf), 0, (struct sockaddr *)&client, &remoteClientSize) < 0)
             perror("server receiving datagram packet");
-        if (strcmp(buf, "GET")==0) {
-            strcpy(buf, "QUOTE:");
-            int r = rand()%N;
-            strcat(buf, quotes[r]);
-            if (sendto(sock, buf, strlen(buf)+1, 0, (struct sockaddr *)&client, remoteClientSize)<0)
-                perror("sending back quote.");
-            *buf = '\0';
-        }
+        if (prefix("GET", buf)) {
+            strsep(&buf, ":");
+            int n = atoi(buf);
+            for(int i = 0; i < n; i++) {
+                strcpy(buf, "QUOTE:");
+                int r = rand()%N;
+                strcat(buf, quotes[r]);
+                if (sendto(sock, buf, strlen(buf)+1, 0, (struct sockaddr *)&client, remoteClientSize)<0)
+                    perror("sending back quote.");
+                *buf = '\0';
+            }
+       }
         else printf("received:\n%s\n", buf);
     }
     

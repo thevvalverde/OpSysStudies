@@ -13,7 +13,7 @@ festers and spreads. A shadow that grows in the dark. \
 A sleepless malice as black as the oncoming wall of night. \
 So it ever was. So will it always be. \
 In time all foul things come forth."
-#define GETREQUEST "GET"
+#define GETREQUEST "GET:"
 #define LOCALHOST "localhost"
 #define SIZE 255
 
@@ -25,6 +25,10 @@ int main(int argc, char *argv[])
     int sock;
     struct sockaddr_in name;
     struct hostent *hp;
+    char* n = argv[1];
+    char* request = malloc(SIZE*sizeof(char));
+    strcat(request, GETREQUEST);
+    strcat(request, n);
     /* create socket on which to send */
     if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     {
@@ -48,13 +52,17 @@ and port both given in the command line */
         return EXIT_FAILURE;
     }
     /* send message */
-    if (write(sock, GETREQUEST, sizeof(DATA)) < 0)
+    
+    if (write(sock, request, SIZE) < 0)
         perror("client sending datagram message");
     char* buf = malloc(SIZE*sizeof(char));
-    if (read(sock, buf, SIZE) < 0)
-        perror("reading message.");
-    strsep(&buf, ":");
-    printf("%s\n", buf);
+    for(int i = 0; i < atoi(n); i++) {
+        if (read(sock, buf, SIZE) < 0)
+            perror("reading message.");
+        strsep(&buf, ":");
+        printf("%s\n", buf);
+    }
+
     close(sock);
     return EXIT_SUCCESS;
 }
