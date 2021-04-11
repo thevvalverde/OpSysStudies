@@ -13,6 +13,10 @@ festers and spreads. A shadow that grows in the dark. \
 A sleepless malice as black as the oncoming wall of night. \
 So it ever was. So will it always be. \
 In time all foul things come forth."
+#define GETREQUEST "GET"
+#define LOCALHOST "localhost"
+#define SIZE 255
+
 /*
 * this is the client side
 */
@@ -29,7 +33,7 @@ int main(int argc, char *argv[])
     }
     /* destination is constructed from hostname
 and port both given in the command line */
-    if ((hp = gethostbyname(argv[1])) == 0)
+    if ((hp = gethostbyname(LOCALHOST)) == 0)
     {
         fprintf(stderr, "%s: unknown host\n", argv[1]);
         return EXIT_FAILURE;
@@ -40,12 +44,16 @@ and port both given in the command line */
     /* connect to given port */
     if (connect(sock, (struct sockaddr *)&name, sizeof(name)) < 0)
     {
-        perror("connecting to server socket");
+        perror("client connecting to server socket");
         return EXIT_FAILURE;
     }
     /* send message */
-    if (write(sock, DATA, sizeof(DATA)) < 0)
-        perror("sending datagram message");
+    if (write(sock, GETREQUEST, sizeof(DATA)) < 0)
+        perror("client sending datagram message");
+    char* buf = malloc(SIZE*sizeof(char));
+    if (read(sock, buf, SIZE) < 0)
+        perror("reading message.");
+    printf("%s\n", buf);
     close(sock);
     return EXIT_SUCCESS;
 }
