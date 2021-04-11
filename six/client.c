@@ -53,6 +53,7 @@ and port both given in the command line */
     char* buf = malloc(SIZE*sizeof(char));
     if (read(sock, buf, SIZE) < 0)
         perror("reading message.");
+    strsep(&buf, ":");
     printf("%s\n", buf);
     close(sock);
     return EXIT_SUCCESS;
